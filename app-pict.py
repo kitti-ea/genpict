@@ -8,33 +8,23 @@ import requests
 from io import BytesIO
 from PIL import Image
 import base64
-from dotenv import load_dotenv
 
-# โหลด Environment Variables จากไฟล์ .env
-load_dotenv()
+# ตั้งค่า OpenAI API key จาก Streamlit Secrets
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-# ตั้งค่า OpenAI API key จาก Environment Variable
-openai_api_key = os.getenv("OPENAI_API_KEY")
-
-
-# ตั้งค่า OpenAI API key จาก Streamlit Secrets หรือ Environment Variable
-#openai_api_key = st.secrets["OPENAI_API_KEY"] if "secrets" in st.__dict__ else os.getenv("OPENAI_API_KEY")
-
-if not openai_api_key:
-    st.warning("กรุณากรอก OpenAI API Key ของคุณในช่องด้านล่าง!")
-    openai_api_key = st.text_input("OpenAI API Key", type="password")
+# ตั้งค่า API key ให้กับ openai
+openai.api_key = openai_api_key
 
 st.title("สร้างภาพด้วย OpenAI DALL·E")
-st.write("Desing by kitti.isuzu@gmail.com")
 st.write("ป้อนคำอธิบายภาพที่คุณต้องการ จากนั้น OpenAI จะสร้างภาพให้คุณ!")
 
 # ฟังก์ชันในการสร้างภาพ
-def generate_image(prompt, api_key):
+def generate_image(prompt):
     try:
         response = openai.Image.create(
             prompt=prompt,
             n=1,
-            size="1024x1024",  # ขนาดภาพ 1080x1080 โดยใช้ 1024x1024 เนื่องจาก OpenAI รองรับขนาดนี้
+            size="1024x1024",  # ใช้ขนาด 1024x1024 เนื่องจาก OpenAI รองรับ
             response_format="url"  # รับ URL ของภาพ
         )
         image_url = response['data'][0]['url']
@@ -61,9 +51,9 @@ with st.form(key='image_form'):
     prompt = st.text_input("ป้อนคำอธิบายภาพที่ต้องการ", "")
     submit_button = st.form_submit_button(label='สร้างภาพ')
 
-if submit_button and prompt and openai_api_key:
+if submit_button and prompt:
     with st.spinner('กำลังสร้างภาพ...'):
-        image_url = generate_image(prompt, openai_api_key)
+        image_url = generate_image(prompt)
     
     if image_url:
         # ดาวน์โหลดภาพจาก URL
