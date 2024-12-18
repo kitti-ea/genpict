@@ -25,7 +25,7 @@ def generate_image(prompt):
         response = openai.Image.create(
             prompt=prompt,
             n=1,
-            size="1792x1024",  # ใช้ขนาด 1024x1024 เนื่องจาก OpenAI รองรับ one of ['256x256', '512x512', '1024x1024', '1024x1792', '1792x1024'] - 'size'
+            size="1024x1024",  # ใช้ขนาด 1024x1024 เนื่องจาก OpenAI รองรับ 
             response_format="url"  # รับ URL ของภาพ
         )
         image_url = response['data'][0]['url']
