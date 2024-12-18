@@ -8,6 +8,14 @@ import requests
 from io import BytesIO
 from PIL import Image
 import base64
+from dotenv import load_dotenv
+
+# โหลด Environment Variables จากไฟล์ .env
+load_dotenv()
+
+# ตั้งค่า OpenAI API key จาก Environment Variable
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
 
 # ตั้งค่า OpenAI API key จาก Streamlit Secrets หรือ Environment Variable
 openai_api_key = st.secrets["OPENAI_API_KEY"] if "secrets" in st.__dict__ else os.getenv("OPENAI_API_KEY")
