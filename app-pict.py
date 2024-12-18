@@ -2,7 +2,7 @@
 
 import os
 import streamlit as st
-import openai==0.80
+import openai==0.28
 import pandas as pd
 import requests
 from io import BytesIO
