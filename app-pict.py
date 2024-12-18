@@ -14,6 +14,7 @@ import base64
 openai.api_key = "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"
 
 st.title("สร้างภาพด้วย OpenAI DALL·E")
+st.title("Design by kitti.isuzu@gmail.com")
 st.write("ป้อนคำอธิบายภาพที่คุณต้องการ จากนั้น OpenAI จะสร้างภาพให้คุณ!")
 
 # ฟังก์ชันในการสร้างภาพ
