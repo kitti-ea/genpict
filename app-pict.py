@@ -2,7 +2,7 @@
 
 import os
 import streamlit as st
-import openai
+import openai==0.80
 import pandas as pd
 import requests
 from io import BytesIO
@@ -10,11 +10,9 @@ from PIL import Image
 import base64
 
 # ตั้งค่า OpenAI API key
-st.secrets["OPENAI_API_KEY"] == "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"
-os.getenv("OPENAI_API_KEY") == "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"
 openai.api_key = st.secrets["OPENAI_API_KEY"] if "secrets" in st.__dict__ else os.getenv("OPENAI_API_KEY")
-openai.api_key == "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"
-#openai.api_key = "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"
+#openai.api_key == "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"
+openai.api_key = "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"
 st.title("สร้างภาพด้วย OpenAI DALL·E")
 st.write("Design by kitti.isuzu@gmail.com")
 st.write("ป้อนคำอธิบายภาพที่คุณต้องการ จากนั้น OpenAI จะสร้างภาพให้คุณ!")
