@@ -9,23 +9,24 @@ from io import BytesIO
 from PIL import Image
 import base64
 
-user_input = st.text_input("กรุณากรอกข้อความของคุณ:")
-openai.api_key = st.text_input
-# ตั้งค่า OpenAI API key
-openai.api_key = st.secrets["OPENAI_API_KEY"] if "secrets" in st.__dict__ else os.getenv("OPENAI_API_KEY")
-#openai.api_key == "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"
-#openai.api_key = "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"
+# ตั้งค่า OpenAI API key จาก Streamlit Secrets หรือ Environment Variable
+openai_api_key = st.secrets["OPENAI_API_KEY"] if "secrets" in st.__dict__ else os.getenv("OPENAI_API_KEY")
+
+if not openai_api_key:
+    st.warning("กรุณากรอก OpenAI API Key ของคุณในช่องด้านล่าง!")
+    openai_api_key = st.text_input("OpenAI API Key", type="password")
+
 st.title("สร้างภาพด้วย OpenAI DALL·E")
-st.write("Design by kitti.isuzu@gmail.com")
+st.write("Desing by kitti.isuzu@gmail.com")
 st.write("ป้อนคำอธิบายภาพที่คุณต้องการ จากนั้น OpenAI จะสร้างภาพให้คุณ!")
 
 # ฟังก์ชันในการสร้างภาพ
-def generate_image(prompt):
+def generate_image(prompt, api_key):
     try:
         response = openai.Image.create(
             prompt=prompt,
             n=1,
-            size="1080x1080",  # ขนาดภาพที่เหมาะสม
+            size="1024x1024",  # ขนาดภาพ 1080x1080 โดยใช้ 1024x1024 เนื่องจาก OpenAI รองรับขนาดนี้
             response_format="url"  # รับ URL ของภาพ
         )
         image_url = response['data'][0]['url']
@@ -34,7 +35,7 @@ def generate_image(prompt):
         st.error(f"เกิดข้อผิดพลาด: {e}")
         return None
 
-# ฟังก์ชันในการดาวน์โหลดภาพ
+# ฟังก์ชันในการดาวน์โหลดภาพและแปลงเป็น Base64
 def download_image(image_url):
     try:
         response = requests.get(image_url)
@@ -52,9 +53,9 @@ with st.form(key='image_form'):
     prompt = st.text_input("ป้อนคำอธิบายภาพที่ต้องการ", "")
     submit_button = st.form_submit_button(label='สร้างภาพ')
 
-if submit_button and prompt:
+if submit_button and prompt and openai_api_key:
     with st.spinner('กำลังสร้างภาพ...'):
-        image_url = generate_image(prompt)
+        image_url = generate_image(prompt, openai_api_key)
     
     if image_url:
         # ดาวน์โหลดภาพจาก URL
