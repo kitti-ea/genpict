@@ -16,6 +16,7 @@ openai_api_key = st.secrets["OPENAI_API_KEY"]
 openai.api_key = openai_api_key
 
 st.title("สร้างภาพด้วย OpenAI DALL·E")
+st.write("design by kitti.isuzu@gmail.com")
 st.write("ป้อนคำอธิบายภาพที่คุณต้องการ จากนั้น OpenAI จะสร้างภาพให้คุณ!")
 
 # ฟังก์ชันในการสร้างภาพ
